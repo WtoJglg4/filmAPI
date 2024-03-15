@@ -1,12 +1,16 @@
 package handler
 
-import "net/http"
+import (
+	"github/film-lib/pkg/service"
+	"net/http"
+)
 
 type Handler struct {
+	services *service.Service
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(services *service.Service) *Handler {
+	return &Handler{services: services}
 }
 
 func (h *Handler) InitRoutes() *http.ServeMux {
