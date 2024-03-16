@@ -10,6 +10,7 @@ import (
 
 func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 	logrus.Println(r.Method, r.URL.Path)
+	w.Header().Set("Content-type", "application/json")
 
 	if r.Method != "POST" {
 		newErrorResponse(w, http.StatusMethodNotAllowed, "error: allowed only POST method")
@@ -42,6 +43,7 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 	logrus.Println(r.Method, r.URL.Path)
+	w.Header().Set("Content-type", "application/json")
 
 	if r.Method != "POST" {
 		newErrorResponse(w, http.StatusMethodNotAllowed, "error: allowed only POST method")
