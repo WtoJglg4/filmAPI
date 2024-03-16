@@ -42,6 +42,12 @@ func main() {
 	mux := handler.NewHandler(services)
 	srv := new(filmapi.Server)
 
+	services.Authorization.CreateUser(filmapi.User{
+		Username: "admin",
+		Password: "admin",
+		Role:     "admin",
+	})
+
 	if err := srv.Run(viper.GetString("port"), mux.InitRoutes()); err != nil {
 		logrus.Fatalf("error while running http server: %s\n", err.Error())
 	}

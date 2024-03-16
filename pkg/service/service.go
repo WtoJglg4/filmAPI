@@ -1,8 +1,13 @@
 package service
 
-import "github/film-lib/pkg/repository"
+import (
+	filmapi "github/film-lib"
+	"github/film-lib/pkg/repository"
+)
 
 type Authorization interface {
+	CreateUser(user filmapi.User) (int, error)
+	GenerateToken(username, password string) (string, error)
 }
 
 type Actor interface {
@@ -18,5 +23,7 @@ type Service struct {
 }
 
 func NewService(repo *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Authorization: NewAuthService(repo.Authorization),
+	}
 }
