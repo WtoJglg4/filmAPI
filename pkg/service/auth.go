@@ -2,6 +2,7 @@ package service
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	filmapi "github/film-lib"
 	"github/film-lib/pkg/repository"
@@ -18,7 +19,8 @@ const (
 
 type tokenClaims struct {
 	jwt.StandardClaims
-	UserId int `json:"user_id"`
+	UserId   int    `json:"user_id"`
+	UserRole string `json:"user_role"`
 }
 
 type AuthService struct {
@@ -47,8 +49,29 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 			IssuedAt:  time.Now().Unix(),
 		},
 		user.Id,
+		user.Role,
 	})
 	return token.SignedString([]byte(signingKey))
+}
+
+func (s *AuthService) ParseToken(accesToken string) (int, string, error) {
+	token, err := jwt.ParseWithClaims(accesToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid signing method")
+		}
+
+		return []byte(signingKey), nil
+	})
+
+	if err != nil {
+		return 0, "", err
+	}
+
+	claims, ok := token.Claims.(*tokenClaims)
+	if !ok {
+		return 0, "", errors.New("token claims are not of type *tokenClaims")
+	}
+	return claims.UserId, claims.UserRole, nil
 }
 
 func generatePasswordHash(password string) string {

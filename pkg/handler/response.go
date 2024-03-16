@@ -8,12 +8,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type error struct {
+type Error struct {
 	Message string
 }
 
 func newErrorResponse(w http.ResponseWriter, statusCode int, message string) {
 	logrus.Error(message)
-	bytes, _ := json.Marshal(error{Message: message})
+	bytes, _ := json.Marshal(Error{Message: message})
 	http.Error(w, fmt.Sprint(string(bytes)), statusCode)
 }
