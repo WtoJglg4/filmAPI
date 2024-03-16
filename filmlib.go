@@ -1,4 +1,4 @@
-package filmlib
+package filmapi
 
 type Actor struct {
 	Id        int    `json:"-"`

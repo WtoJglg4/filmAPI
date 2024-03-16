@@ -1,4 +1,4 @@
-package filmlib
+package filmapi
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package filmlib
+package filmapi
 
 type User struct {
 	Id       int    `json:"-"`
