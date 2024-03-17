@@ -14,7 +14,6 @@ func (h *Handler) actors(w http.ResponseWriter, r *http.Request) {
 	logrus.Println(r.Method, r.URL)
 	err := h.userIdentity(w, r)
 	if err != nil {
-		logrus.Println("not identified")
 		return
 	}
 
@@ -28,11 +27,13 @@ func (h *Handler) actors(w http.ResponseWriter, r *http.Request) {
 			h.CreateActor(w, r)
 		default:
 			newErrorResponse(w, http.StatusMethodNotAllowed, "error: method not allowed")
+			return
 		}
 	default:
 		actorId, err := strconv.Atoi(param)
 		if err != nil {
 			newErrorResponse(w, http.StatusBadRequest, "error: invalid id parameter")
+			return
 		}
 
 		switch r.Method {
@@ -44,9 +45,9 @@ func (h *Handler) actors(w http.ResponseWriter, r *http.Request) {
 			h.DeleteActorById(w, r, actorId)
 		default:
 			newErrorResponse(w, http.StatusMethodNotAllowed, "error: method not allowed")
+			return
 		}
 	}
-
 }
 
 func (h *Handler) CreateActor(w http.ResponseWriter, r *http.Request) {
@@ -94,7 +95,6 @@ func (h *Handler) GetActorsList(w http.ResponseWriter, r *http.Request) {
 		newErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	logrus.Println(actors_list)
 
 	json.NewEncoder(w).Encode(actors_list)
 }
@@ -110,7 +110,6 @@ func (h *Handler) GetActorById(w http.ResponseWriter, r *http.Request, id int) {
 		newErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	logrus.Println(actor)
 
 	json.NewEncoder(w).Encode(actor)
 }

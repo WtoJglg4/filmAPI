@@ -21,8 +21,7 @@ func (h *Handler) InitRoutes() *http.ServeMux {
 
 	mux.HandleFunc("/actors/", h.actors)
 	mux.HandleFunc("/films/", h.films)
-	mux.HandleFunc("/films/by-name/", h.filmsByName)
-	mux.HandleFunc("/films/by-actor/", h.filmsByActor)
+	mux.HandleFunc("/films/by-part/", h.filmsByPart)
 
 	return mux
 }
