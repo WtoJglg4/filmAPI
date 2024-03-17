@@ -10,11 +10,24 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "github/film-lib/docs"
+
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
+//	@title			FilmAPI
+//	@version		1.0
+//	@description	backend of the application, which provides a REST API for managing the films database
+
+//	@host		localhost:3000
+//	@BasePath	/
+
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
+// @description					Use "Bearer " + token. Admin: {login: "admin", pass: "admin"}
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 

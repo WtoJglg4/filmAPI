@@ -50,6 +50,20 @@ func (h *Handler) actors(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Summary		Create actor
+// @Security		ApiKeyAuth
+// @Security AuthToken_role:admin
+// @Tags			actors
+// @Description	create actor
+// @ID				create-actor
+// @Accept			json
+// @Produce		json
+// @Param			input	body		filmapi.Actor	true	"actor info"
+// @Success		200		{object}	integer			"id"
+// @Failure		400,404	{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/actors/ [post]
 func (h *Handler) CreateActor(w http.ResponseWriter, r *http.Request) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -84,6 +98,17 @@ func (h *Handler) CreateActor(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// @Summary		Get actors list
+// @Security		ApiKeyAuth
+// @Tags			actors
+// @Description	get actors list with their films
+// @ID				get-actors-list
+// @Produce		json
+// @Success		200		{array}		filmapi.ActorWithFilms
+// @Failure		404		{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/actors/ [get]
 func (h *Handler) GetActorsList(w http.ResponseWriter, r *http.Request) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -99,6 +124,18 @@ func (h *Handler) GetActorsList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(actors_list)
 }
 
+// @Summary		Get actor by id
+// @Security		ApiKeyAuth
+// @Tags			actors
+// @Description	get actor by id with their films
+// @ID				get-actor-by-id
+// @Produce		json
+// @Param			id		query		int	true	"Actor ID"
+// @Success		200		{object}	filmapi.ActorWithFilms
+// @Failure		400,404	{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/actors/{id} [get]
 func (h *Handler) GetActorById(w http.ResponseWriter, r *http.Request, id int) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -114,6 +151,20 @@ func (h *Handler) GetActorById(w http.ResponseWriter, r *http.Request, id int) {
 	json.NewEncoder(w).Encode(actor)
 }
 
+// @Summary		Update actor by id
+// @Security		ApiKeyAuth
+// @Tags			actors
+// @Description	update actor by id
+// @ID				update-actor-by-id
+// @Accept			json
+// @Produce		json
+// @Param			input	body		filmapi.Actor	true	"actor info"
+// @Param			id		query		int				true	"Actor ID"
+// @Success		200		{string}	string			"status"
+// @Failure		400,404	{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/actors/ [put]
 func (h *Handler) UpdateActorById(w http.ResponseWriter, r *http.Request, id int) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -147,6 +198,17 @@ func (h *Handler) UpdateActorById(w http.ResponseWriter, r *http.Request, id int
 	})
 }
 
+// @Summary		Delete actor by id
+// @Security		ApiKeyAuth
+// @Tags			actors
+// @Description	delete actor by id
+// @ID				delete-actor-by-id
+// @Produce		json
+// @Param			id		query		int		true	"Actor ID"
+// @Success		200		{string}	string	"status"
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/actors/ [delete]
 func (h *Handler) DeleteActorById(w http.ResponseWriter, r *http.Request, id int) {
 	_, err := getUserId(w)
 	if err != nil {

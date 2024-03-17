@@ -1,0 +1,538 @@
+basePath: /
+definitions:
+  filmapi.Actor:
+    properties:
+      birth_date:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  filmapi.ActorWithFilms:
+    properties:
+      birth_date:
+        type: string
+      films:
+        items:
+          type: string
+        type: array
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  filmapi.Film:
+    properties:
+      actors:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: integer
+      release_date:
+        type: string
+    type: object
+  filmapi.User:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: backend of the application, which provides a REST API for managing
+    the films database
+  title: FilmAPI
+  version: "1.0"
+paths:
+  /actors/:
+    delete:
+      description: delete actor by id
+      operationId: delete-actor-by-id
+      parameters:
+      - description: Actor ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete actor by id
+      tags:
+      - actors
+    get:
+      description: get actors list with their films
+      operationId: get-actors-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/filmapi.ActorWithFilms'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get actors list
+      tags:
+      - actors
+    post:
+      consumes:
+      - application/json
+      description: create actor
+      operationId: create-actor
+      parameters:
+      - description: actor info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/filmapi.Actor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: id
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      - AuthToken_role:admin: []
+      summary: Create actor
+      tags:
+      - actors
+    put:
+      consumes:
+      - application/json
+      description: update actor by id
+      operationId: update-actor-by-id
+      parameters:
+      - description: actor info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/filmapi.Actor'
+      - description: Actor ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update actor by id
+      tags:
+      - actors
+  /actors/{id}:
+    get:
+      description: get actor by id with their films
+      operationId: get-actor-by-id
+      parameters:
+      - description: Actor ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/filmapi.ActorWithFilms'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get actor by id
+      tags:
+      - actors
+  /auth/sign-in/:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/filmapi.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: signIn
+      tags:
+      - auth
+  /auth/sign-up/:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/filmapi.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: id
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: signUp
+      tags:
+      - auth
+  /films/:
+    delete:
+      description: delete film by id
+      operationId: delete-film-by-id
+      parameters:
+      - description: Film ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete film by id
+      tags:
+      - films
+    get:
+      description: get films list sorted by name, rating or release_date (default
+        by rating descending)
+      operationId: get-films-list
+      parameters:
+      - description: 'Sorting parameter: '
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/filmapi.Film'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get films list
+      tags:
+      - films
+    post:
+      consumes:
+      - application/json
+      description: create film
+      operationId: create-film
+      parameters:
+      - description: film info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/filmapi.Film'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: id
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create film
+      tags:
+      - films
+    put:
+      consumes:
+      - application/json
+      description: update film by id
+      operationId: update-film-by-id
+      parameters:
+      - description: film info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/filmapi.Film'
+      - description: Film ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update film by id
+      tags:
+      - films
+  /films/by-part/{param}:
+    get:
+      description: Get film by a fragment of its title or actor's name
+      operationId: get-film-by-part
+      parameters:
+      - description: film name
+        in: query
+        name: name
+        type: string
+      - description: actor`s name
+        in: query
+        name: actor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/filmapi.Film'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get film by part
+      tags:
+      - films
+securityDefinitions:
+  ApiKeyAuth:
+    description: 'Use "Bearer " + token. Admin: {login: "admin", pass: "admin"}'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

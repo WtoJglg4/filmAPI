@@ -58,6 +58,19 @@ func (h *Handler) films(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Summary		Create film
+// @Security		ApiKeyAuth
+// @Tags			films
+// @Description	create film
+// @ID				create-film
+// @Accept			json
+// @Produce		json
+// @Param			input	body		filmapi.Film	true	"film info"
+// @Success		200		{object}	integer			"id"
+// @Failure		400,404	{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/films/ [post]
 func (h *Handler) CreateFilm(w http.ResponseWriter, r *http.Request) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -91,6 +104,18 @@ func (h *Handler) CreateFilm(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// @Summary		Get films list
+// @Security		ApiKeyAuth
+// @Tags			films
+// @Description	get films list sorted by name, rating or release_date (default by rating descending)
+// @ID				get-films-list
+// @Produce		json
+// @Param			sort	query		string	false	"Sorting parameter: "name", "rating", "release_date" (default by rating descending)"
+// @Success		200		{array}		filmapi.Film
+// @Failure		400,404	{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/films/ [get]
 func (h *Handler) GetFilmsList(w http.ResponseWriter, r *http.Request, sort string) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -106,6 +131,20 @@ func (h *Handler) GetFilmsList(w http.ResponseWriter, r *http.Request, sort stri
 	json.NewEncoder(w).Encode(films_list)
 }
 
+// @Summary		Update film by id
+// @Security		ApiKeyAuth
+// @Tags			films
+// @Description	update film by id
+// @ID				update-film-by-id
+// @Accept			json
+// @Produce		json
+// @Param			input	body		filmapi.Film	true	"film info"
+// @Param			id		query		int				true	"Film ID"
+// @Success		200		{string}	string			"status"
+// @Failure		400,404	{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/films/ [put]
 func (h *Handler) UpdateFilmById(w http.ResponseWriter, r *http.Request, id int) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -139,6 +178,18 @@ func (h *Handler) UpdateFilmById(w http.ResponseWriter, r *http.Request, id int)
 	})
 }
 
+// @Summary		Delete film by id
+// @Security		ApiKeyAuth
+// @Tags			films
+// @Description	delete film by id
+// @ID				delete-film-by-id
+// @Produce		json
+// @Param			id		query		int		true	"Film ID"
+// @Success		200		{string}	string	"status"
+// @Failure		400,404	{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/films/ [delete]
 func (h *Handler) DeleteFilmById(w http.ResponseWriter, r *http.Request, id int) {
 	_, err := getUserId(w)
 	if err != nil {
@@ -185,6 +236,19 @@ func (h *Handler) filmsByPart(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Summary		Get film by part
+// @Security		ApiKeyAuth
+// @Tags			films
+// @Description	Get film by a fragment of its title or actor's name
+// @ID				get-film-by-part
+// @Produce		json
+// @Param			name	query		string	false	"film name"
+// @Param			actor	query		string	false	"actor`s name"
+// @Success		200		{array}		filmapi.Film
+// @Failure		404		{object}	errorResponse
+// @Failure		500		{object}	errorResponse
+// @Failure		default	{object}	errorResponse
+// @Router			/films/by-part/{param} [get]
 func (h *Handler) GetFilmByPart(w http.ResponseWriter, r *http.Request, parameter, req string) {
 	_, err := getUserId(w)
 	if err != nil {
