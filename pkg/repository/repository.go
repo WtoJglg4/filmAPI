@@ -20,6 +20,11 @@ type Actor interface {
 }
 
 type Film interface {
+	CreateFilm(actor filmapi.Film) (int, error)
+	GetFilmsList(sort string) ([]filmapi.Film, error)
+	UpdateFilmById(name, description, releaseDate string, rating, id int) error
+	DeleteFilmById(id int) error
+	GetFilmByPart(parameter, req string) ([]filmapi.Film, error)
 }
 
 type Repository struct {
@@ -32,5 +37,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
 		Actor:         NewActorsPostgres(db),
+		Film:          NewFilmsPostgres(db),
 	}
 }

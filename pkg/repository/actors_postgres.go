@@ -20,7 +20,7 @@ func NewActorsPostgres(db *sqlx.DB) *ActorsPostgres {
 func (r *ActorsPostgres) CreateActor(actor filmapi.Actor) (int, error) {
 	var id int
 
-	query := fmt.Sprintf("INSERT INTO %s (name, gender, birth_date) VALUES ($1, $2, $3) RETURNING id", actorsTable)
+	query := fmt.Sprintf("INSERT INTO %s (name, gender, birth_date) VALUES ($1, $2, to_date($3, 'DD.MM.YYYY')) RETURNING id", actorsTable)
 	row := r.db.QueryRow(query, actor.Name, actor.Gender, actor.BirthDate)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
@@ -30,7 +30,7 @@ func (r *ActorsPostgres) CreateActor(actor filmapi.Actor) (int, error) {
 
 func (r *ActorsPostgres) GetActorsList() ([]filmapi.ActorWithFilms, error) {
 	var actors_list []filmapi.Actor
-	query := fmt.Sprintf("SELECT * FROM %s", actorsTable)
+	query := fmt.Sprintf("SELECT id, name, gender, to_char(birth_date, 'DD.MM.YYYY') AS birth_date FROM %s", actorsTable)
 	if err := r.db.Select(&actors_list, query); err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (r *ActorsPostgres) GetActorsList() ([]filmapi.ActorWithFilms, error) {
 
 func (r *ActorsPostgres) GetActorById(id int) (filmapi.ActorWithFilms, error) {
 	var actorWithFilms []filmapi.ActorWithFilms
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id = %d", actorsTable, id)
+	query := fmt.Sprintf("SELECT id, name, gender, to_char(birth_date, 'DD.MM.YYYY') AS birth_date FROM %s WHERE id = %d", actorsTable, id)
 	if err := r.db.Select(&actorWithFilms, query); err != nil {
 		return filmapi.ActorWithFilms{}, err
 	}
@@ -76,7 +76,7 @@ func (r *ActorsPostgres) UpdateActorById(name, gender, birthDate string, id int)
 		args = append(args, fmt.Sprintf("gender = '%s' ", gender))
 	}
 	if birthDate != "" {
-		args = append(args, fmt.Sprintf("birth_date = '%s' ", birthDate))
+		args = append(args, fmt.Sprintf("birth_date = to_date('%s', 'DD.MM.YYYY')", birthDate))
 	}
 	query := fmt.Sprintf("UPDATE %s SET %s WHERE id = %d", actorsTable, strings.Join(args, ","), id)
 
