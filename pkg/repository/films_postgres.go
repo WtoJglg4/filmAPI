@@ -56,8 +56,6 @@ func (r *FilmsPostgres) GetFilmsList(sort string) ([]filmapi.Film, error) {
 	if sort == "name" {
 		order = "ASC"
 	}
-	fmt.Println(sort, order)
-
 	var films_list []filmapi.Film
 
 	query := fmt.Sprintf("SELECT id, name, description, to_char(release_date, 'DD.MM.YYYY') AS release_date_new, rating FROM %s ORDER BY %s %s", filmsTable, sort, order)
@@ -112,6 +110,7 @@ func (r *FilmsPostgres) GetFilmByPart(parameter, req string) ([]filmapi.Film, er
 	if err := r.db.Select(&films_list, query); err != nil {
 		return nil, err
 	}
+
 	for i, f := range films_list {
 		query = "SELECT actors.name AS actors_list FROM actors JOIN actors_films ON actors_films.actor_id = actors.id JOIN films ON actors_films.film_id = films.id WHERE films.id = $1"
 		if err := r.db.Select(&films_list[i].Actors, query, f.Id); err != nil {

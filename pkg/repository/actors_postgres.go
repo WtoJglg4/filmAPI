@@ -34,7 +34,6 @@ func (r *ActorsPostgres) GetActorsList() ([]filmapi.ActorWithFilms, error) {
 	if err := r.db.Select(&actors_list, query); err != nil {
 		return nil, err
 	}
-	fmt.Println(actors_list)
 	actorsWithFilms := make([]filmapi.ActorWithFilms, len(actors_list))
 
 	for i := range actors_list {
@@ -80,7 +79,6 @@ func (r *ActorsPostgres) UpdateActorById(name, gender, birthDate string, id int)
 	}
 	query := fmt.Sprintf("UPDATE %s SET %s WHERE id = %d", actorsTable, strings.Join(args, ","), id)
 
-	// fmt.Println(query)
 	_, err := r.db.Exec(query)
 	return err
 }
