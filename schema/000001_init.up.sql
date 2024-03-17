@@ -29,3 +29,5 @@ CREATE TABLE actors_films
     actor_id    int references actors(id) on delete cascade not null, 
     film_id     int references films(id) on delete cascade not null
 );
+
+SET datestyle = "ISO, DMY";
