@@ -2,7 +2,6 @@ package filmapi
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"time"
 )
@@ -19,7 +18,6 @@ func (s *Server) Run(port string, mux *http.ServeMux) error {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	log.Printf("server started on %s\n", s.httpServer.Addr)
 	return s.httpServer.ListenAndServe()
 }
 

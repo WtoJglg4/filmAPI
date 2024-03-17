@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	filmapi "github/film-lib"
 	handler "github/film-lib/pkg/handler"
 	"github/film-lib/pkg/repository"
 	"github/film-lib/pkg/service"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -48,8 +51,25 @@ func main() {
 		Role:     "admin",
 	})
 
-	if err := srv.Run(viper.GetString("port"), mux.InitRoutes()); err != nil {
-		logrus.Fatalf("error while running http server: %s\n", err.Error())
+	go func() {
+		if err := srv.Run(viper.GetString("port"), mux.InitRoutes()); err != nil {
+			logrus.Fatalf("error while running http server: %s\n", err.Error())
+		}
+	}()
+
+	logrus.Printf("FilmAPI started on :%s\n", viper.GetString("port"))
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	logrus.Println("FilmAPI Shutting Down")
+	if err := srv.Shutdown(context.Background()); err != nil {
+		logrus.Errorf("error occured on server shutting down: %s", err.Error())
+	}
+
+	if err := db.Close(); err != nil {
+		logrus.Errorf("error occured on db connection close: %s", err.Error())
 	}
 }
 
