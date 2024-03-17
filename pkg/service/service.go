@@ -20,6 +20,11 @@ type Actor interface {
 }
 
 type Film interface {
+	CreateFilm(film filmapi.Film) (int, error)
+	GetFilmsList(sort string) ([]filmapi.Film, error)
+	UpdateFilmById(name, description, releaseDate string, rating, id int) error
+	DeleteFilmById(id int) error
+	GetFilmByPart(parameter, req string) ([]filmapi.Film, error)
 }
 
 type Service struct {
@@ -32,5 +37,6 @@ func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repo.Authorization),
 		Actor:         NewActorService(repo.Actor),
+		Film:          NewFilmService(repo.Film),
 	}
 }
