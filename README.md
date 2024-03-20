@@ -11,6 +11,8 @@ FilmAPI позволяет пользователям добавлять, пол
 ![Go](images/go.png)
 ![PostgreSQL](images/postgres.png)
 ![Docker](images/docker.png)
+![Docker-compose](images/docker-compose.png)
+![Git](images/git.png)
 
 
 ## Установка
@@ -18,6 +20,7 @@ FilmAPI позволяет пользователям добавлять, пол
 1. Клонируйте репозиторий:
 
 git clone https://github.com/WtoJglg4/filmAPI.git
+
 cd filmAPI
 
 2. Убедитесь, что у вас установлен Docker Engine.
