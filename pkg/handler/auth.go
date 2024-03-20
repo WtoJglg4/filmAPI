@@ -8,18 +8,18 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// @Summary		signUp
-// @Tags			auth
-// @Description	create account
-// @ID				create-account
-// @Accept			json
-// @Produce		json
-// @Param			input	body		filmapi.User	true	"account info"
-// @Success		200		{object}	integer			"id"
-// @Failure		400,405	{object}	errorResponse
-// @Failure		500		{object}	errorResponse
-// @Failure		default	{object}	errorResponse
-// @Router			/auth/sign-up/ [post]
+//	@Summary		signUp
+//	@Tags			auth
+//	@Description	create account
+//	@ID				create-account
+//	@Accept			json
+//	@Produce		json
+//	@Param			input	body		filmapi.User	true	"account info"
+//	@Success		200		{object}	integer			"id"
+//	@Failure		400,405	{object}	errorResponse
+//	@Failure		500		{object}	errorResponse
+//	@Failure		default	{object}	errorResponse
+//	@Router			/auth/sign-up/ [post]
 func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 	logrus.Println(r.Method, r.URL.Path)
 	w.Header().Set("Content-type", "application/json")
@@ -53,18 +53,18 @@ func (h *Handler) signUp(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// @Summary		signIn
-// @Tags			auth
-// @Description	login
-// @ID				login
-// @Accept			json
-// @Produce		json
-// @Param			input		body		filmapi.User	true	"credentials"
-// @Success		200			{string}	string			"token"
-// @Failure		400,404,405	{object}	errorResponse
-// @Failure		500			{object}	errorResponse
-// @Failure		default		{object}	errorResponse
-// @Router			/auth/sign-in/ [post]
+//	@Summary		signIn
+//	@Tags			auth
+//	@Description	login
+//	@ID				login
+//	@Accept			json
+//	@Produce		json
+//	@Param			input		body		filmapi.User	true	"credentials"
+//	@Success		200			{string}	string			"token"
+//	@Failure		400,404,405	{object}	errorResponse
+//	@Failure		500			{object}	errorResponse
+//	@Failure		default		{object}	errorResponse
+//	@Router			/auth/sign-in/ [post]
 func (h *Handler) signIn(w http.ResponseWriter, r *http.Request) {
 	logrus.Println(r.Method, r.URL.Path)
 	w.Header().Set("Content-type", "application/json")
