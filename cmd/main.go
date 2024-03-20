@@ -71,6 +71,7 @@ func main() {
 	}()
 
 	logrus.Printf("FilmAPI started on :%s\n", viper.GetString("port"))
+	logrus.Printf("Admin`s login: %s\n Admin`s password: %s\n", "admin", "admin")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)

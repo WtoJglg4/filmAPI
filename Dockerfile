@@ -28,4 +28,6 @@ COPY configs ./configs/
 COPY wait-for-postgres.sh /
 RUN chmod +x /wait-for-postgres.sh
 
+
+
 CMD [ "/main" ]
