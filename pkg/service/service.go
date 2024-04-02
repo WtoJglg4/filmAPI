@@ -5,6 +5,8 @@ import (
 	"github/film-lib/pkg/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Authorization interface {
 	CreateUser(user filmapi.User) (int, error)
 	GenerateToken(username, password string) (string, error)

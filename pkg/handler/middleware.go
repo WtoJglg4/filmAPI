@@ -27,15 +27,20 @@ func (h *Handler) userIdentity(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	headerParts := strings.Split(header[0], " ")
-	if len(headerParts) != 2 {
+	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
 		newErrorResponse(w, http.StatusUnauthorized, "invalid auth header")
 		return errors.New("invalid auth header")
 	}
 
+	if headerParts[1] == "" {
+		newErrorResponse(w, http.StatusUnauthorized, "token is empty")
+		return errors.New("token is empty")
+	}
+
 	userId, userRole, err := h.services.Authorization.ParseToken(headerParts[1])
 	if err != nil {
-		newErrorResponse(w, http.StatusUnauthorized, err.Error())
-		return errors.New("invalid auth header")
+		newErrorResponse(w, http.StatusUnauthorized, "failed to parse token")
+		return errors.New("failed to parse token")
 	}
 
 	w.Header().Set(userIdCtx, fmt.Sprint(userId))
